@@ -5,7 +5,6 @@
 |  name  |  var  |
 | ---- | ---- |
 |  python3.7.8  |  3.7.8  |
-|  TD  |  TD  |
 |  python-chromedriver-binary  |  85.0.4183.87.0  |
 |  selenium  |  3.141.0  |
 |  google-api-core  |  1.22.2  |
