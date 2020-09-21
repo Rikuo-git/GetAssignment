@@ -1,5 +1,5 @@
 # GetAssignment
-授業支援から自動取得
+授業支援から課題を自動取得して、googleカレンダーに追加
 
 ### 環境
 |  name  |  var  |
