@@ -9,7 +9,7 @@ from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-from ko import assignments, launch, log_in
+from ko import assignments, launch, log_in,switchpage
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
@@ -45,7 +45,10 @@ def main():
     username = info['login']['username']
     password = info['login']['password']
     log_in(driver, username, password)
+    switchpage(driver,"BTN_HARU")
     kadai = assignments(driver)
+    switchpage(driver,"BTN_AKI")
+    kadai += assignments(driver)
     driver.quit()
 
     # Call the Calendar API
@@ -65,7 +68,6 @@ def main():
             start = event["start"].get("dateTime", event["start"].get("date"))
             tasks.add((event["summary"], start))
     for title, due in kadai:
-        due = dt.datetime.strptime(due, "%Y-%m-%d %H:%M")
         due_iso = due.isoformat()
         if due > dt.datetime.now() and (title, due_iso + "+09:00") not in tasks:
             task = {

@@ -1,7 +1,7 @@
+import datetime as dt
 import time
 
 import chromedriver_binary
-
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -37,9 +37,24 @@ def assignments(driver):
         if div.find_element_by_tag_name("h4").text == "提出要レポート":
             for tr in div.find_elements_by_tag_name("tr"):
                 divs = tr.find_elements_by_tag_name("div")
-                if len(divs) > 1 and divs[1].text != "提出期限":
-                    tasks.append((divs[0].text, divs[1].text))
+                if len(divs) < 2:
+                    continue
+                title = divs[0].text
+                due = divs[1].text
+                if due == "提出期限":
+                    continue
+                due = dt.datetime.strptime(due, "%Y-%m-%d %H:%M")
+                if due > dt.datetime.now():
+                    tasks.append((title, due))
     return tasks
+
+
+def switchpage(driver, btn):
+    buttun = driver.find_element_by_name(btn)
+    buttun.click()
+    time.sleep(3)
+
+
 def launch():
     # load driver
     options = webdriver.ChromeOptions()
@@ -54,6 +69,7 @@ def launch():
     driver.implicitly_wait(10)
 
     return driver
+
 
 def main():
     driver = launch()
