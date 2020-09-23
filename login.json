@@ -1,0 +1,7 @@
+{
+  "login":{
+  "username":"自分のusename",
+  "password":"自分のpassword"
+  },
+  "calendarId":"追加したいgoogleカレンダーのID"
+}
