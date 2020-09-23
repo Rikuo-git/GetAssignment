@@ -19,6 +19,15 @@ Line通知はGoogle Apps Scriptを使ってLINE notifyにPOST　　
 1. File > プロジェクトのプロパティー　> スクリプトのプロパティー　にさっき取得したLINEのトークン(neme:LINE_TOKEN)とgoogleカレンダーのIDを追加(name:calendarId)
 1. notifyDailyやnotifyWeeklyを実行。定期実行したかったらトリガーを設定。
 
+
+##### 注意
+pythonのモジュールがない場合はpipとかで入れてね  
+seleniumとchromedriverのインストール  
+`pip install selenium chromedriver-binary`  
+google calendar apiのインストール  
+`pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib`
+
+
 ## テスト環境
 |  name  |  version  |
 | ---- | ---- |
@@ -31,6 +40,7 @@ Line通知はGoogle Apps Scriptを使ってLINE notifyにPOST　　
 |  google-auth-httplib2  |  0.0.4  |
 |  google-auth-oauthlib  |  0.4.1  |
 |  googleapis-common-protos  |  1.52.0  |
+
 
 ## 参考
 https://developers.google.com/calendar/quickstart/python  
