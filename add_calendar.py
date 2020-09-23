@@ -68,17 +68,18 @@ def main():
             start = event["start"].get("dateTime", event["start"].get("date"))
             tasks.add((event["summary"], start))
     for title, due in kadai:
-        due_iso = due.isoformat()
-        if due > dt.datetime.now() and (title, due_iso + "+09:00") not in tasks:
+        start = (due - dt.timedelta(minutes=1)).isoformat()
+        end = due.isoformat()
+        if due > dt.datetime.now() and (title, start + "+09:00") not in tasks:
             task = {
                 "summary": title,
                 "description": "自動取得",
                 "start": {
-                    "dateTime": due_iso,
+                    "dateTime": start,
                     "timeZone": "Japan"
                 },
                 "end": {
-                    "dateTime": due_iso,
+                    "dateTime": end,
                     "timeZone": "Japan"
                 },
             }

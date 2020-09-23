@@ -1,23 +1,26 @@
 // Google Apps Script
 
-
 function notifyDaily() {
-  var cal = getCalendar();
+  // カレンダー取得
+  var calId = PropertiesService.getScriptProperties().getProperty('calendarId');
+  var cal = CalendarApp.getCalendarById(calId);
   //　日付の設定
-  var {start,end} = setDate();
+  var dt = new Date();
   // LINE Notifyに送るメッセージ
   var msg = "\n~今日の課題~\n";
   // 課題をテキストとして取得
-  var events = getAssignments(cal,start,end);
+  var events = getAssignments(cal,dt);
   if(events !="なし\n"){
      sendNotification(msg+events);
   }
 }
 
 function notifyWeekly() {
-  var cal = getCalendar();
-  // 日付の設定
-  var {start,end} = setDate();
+  //カレンダー取得
+  var calId = PropertiesService.getScriptProperties().getProperty('calendarId');
+  var cal = CalendarApp.getCalendarById(calId);
+  //　日付の設定
+  var dt = new Date();
   var weekday = ["日", "月", "火", "水", "木", "金", "土"];
   
   // LINE Notifyに送るメッセージ
@@ -25,29 +28,12 @@ function notifyWeekly() {
 
   //　1週間の課題を取得
   for ( var i = 0;  i < 7;  i++ ) {
-    start.setDate(start.getDate() + 1);
-    end.setDate(end.getDate() + 1);
-    msg += Utilities.formatDate(start, 'JST', 'M/d(' + weekday[start.getDay()] + ')');
-    msg += getAssignments(cal,start,end);
+    dt.setDate(dt.getDate() + 1);
+    msg += Utilities.formatDate(dt, 'JST', 'M/d(' + weekday[dt.getDay()] + ')');
+    msg += getAssignments(cal,dt);
   }
 
   sendNotification(msg);
-}
-
-// カレンダーを取得
-function getCalendar(){
-  // カレンダーID
-  var calId = PropertiesService.getScriptProperties().getProperty('calendarId');
-  var cal = CalendarApp.getCalendarById(calId);
-  return cal
-}
-
-function setDate(){
- //　日付の設定
-  var dt = new Date();
-  var start = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(),'0','1');
-  var end = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()+1,'0','1');
-  return {start, end}
 }
 
 // LINEに送る
@@ -65,9 +51,9 @@ function sendNotification(msg){
 }
 
 //　googleカレンダーから課題を取得
-function getAssignments(cal,start,end){
+function getAssignments(cal,dt){
   // googleカレンダーから課題を配列で取得。
-  var events = cal.getEvents(start,end);
+  var events = cal.getEventsForDay(dt);
   
   //　課題をmsgに変換
   var msg = "";
@@ -85,7 +71,7 @@ function eventsToMsg(events/* array */){
   var msg = "";
   events.forEach( function(event, index){
     var title = event.getTitle();
-    var due = Utilities.formatDate(event.getStartTime(), 'JST', 'HH:mm');
+    var due = Utilities.formatDate(event.getEndTime(), 'JST', 'HH:mm');
     msg += "・"+title + "\n" +"締切:" + due + "\n\n";
   });
   return msg;
